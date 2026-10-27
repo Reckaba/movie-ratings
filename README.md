@@ -23,7 +23,17 @@ Exploratory analysis of 500,000 MovieLens ratings with SQL, and a movie recommen
 
 Evaluation is time-based: each user's most recent 20% of ratings are the test set, hyperparameters are tuned on a validation split made the same way, and the metrics are Precision@10, Recall@10, NDCG@10 and catalog coverage.
 
-The 500K sample above cannot evaluate a recommender. It was drawn rating by rating, so each user kept about 2.5% of their history (median: 3 ratings), and every model, popularity included, scores below 0.2% Precision@10. The recommender therefore uses [MovieLens latest-small](https://grouplens.org/datasets/movielens/latest/), which keeps complete histories for 610 users. The notebook downloads it on first run.
+The 500K sample above cannot evaluate a recommender. It was drawn rating by rating, so each user kept about 2.5% of their history (median: 3 ratings), and every model, popularity included, scores below 0.2% Precision@10. The recommender therefore uses [MovieLens latest-small](https://grouplens.org/datasets/movielens/latest/), which keeps complete histories for 610 users (100,836 ratings). The notebook downloads it on first run.
+
+| Model | Precision@10 | Recall@10 | NDCG@10 | Catalog coverage |
+|---|---|---|---|---|
+| Popularity | 0.074 | 0.040 | 0.088 | 1.2% |
+| Item-kNN | 0.104 | 0.059 | 0.116 | 2.3% |
+| **EASE** | **0.118** | **0.071** | **0.130** | **7.7%** |
+
+**EASE beats the popularity baseline by 60% in Precision@10** and recommends more than six times as much of the catalog.
+
+![Recommender results](data/recommender_results.png)
 
 ## Run it
 
