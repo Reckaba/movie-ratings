@@ -122,9 +122,7 @@ def evaluate(model, data: Interactions, test: pd.DataFrame, k: int = 10, batch_s
         seen = data.X[batch]
         scores = model.score(seen)
         scores[seen.nonzero()] = -np.inf
-        top = np.argpartition(-scores, k, axis=1)[:, :k]
-        order = np.argsort(-np.take_along_axis(scores, top, axis=1), axis=1)
-        top = np.take_along_axis(top, order, axis=1)
+        top = np.argsort(-scores, axis=1, kind="stable")[:, :k]  # stable: ties break the same way everywhere
 
         relevant = truth[batch].toarray()
         hits = np.take_along_axis(relevant, top, axis=1)
