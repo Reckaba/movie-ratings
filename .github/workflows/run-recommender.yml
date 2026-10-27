@@ -1,0 +1,29 @@
+name: Run recommender notebook (part 2)
+
+on:
+  push:
+    branches: [ci/run-recommender]
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Execute part 2 (downloads MovieLens latest-small)
+        run: python .github/run_recommender_part2.py
+      - name: Commit outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add notebooks/02_recommender.ipynb data/recommender_results.png
+          git commit -m "Execute recommender notebook part 2"
+          git push origin HEAD:ci/run-recommender
