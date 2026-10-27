@@ -6,9 +6,9 @@ from nbclient import NotebookClient
 
 PATH = "notebooks/02_recommender.ipynb"
 nb = nbformat.read(PATH, as_version=4)
-setup = next(i for i, c in enumerate(nb.cells) if c.cell_type == "code")
-run_idx = [setup] + [i for i, c in enumerate(nb.cells)
-                     if c.cell_type == "code" and "part2" in c.metadata.get("tags", [])]
+# Every code cell except part 1, which needs data/movies.db (not in the repository)
+run_idx = [i for i, c in enumerate(nb.cells)
+           if c.cell_type == "code" and "movies.db" not in c.source]
 
 sub = copy.deepcopy(nb)
 sub.cells = [copy.deepcopy(nb.cells[i]) for i in run_idx]
